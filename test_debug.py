@@ -64,7 +64,7 @@ result_folder = './result/'
 if not os.path.isdir(result_folder):
     os.mkdir(result_folder)
 
-def test_net(net, image, text_threshold, link_threshold, low_text, cuda):
+def test_net(net, image, text_threshold, link_threshold, low_text, cuda, image_path):
     t0 = time.time()
 
     # resize
@@ -89,8 +89,9 @@ def test_net(net, image, text_threshold, link_threshold, low_text, cuda):
     t1 = time.time()
     
     if args.debug:
-        np.save('score_text.npy', score_text)
-        np.save('score_link.npy', score_link)
+        os.makedirs('debug', exists_ok=True)
+        np.save(os.path.join('./debug', os.path.basename(image_path).split[0] + '_score_text.npy'), score_text)
+        np.save(os.path.join('./debug', os.path.basename(image_path).split[0] + '_score_link.npy'), score_link)
 
     # Post-processing
     boxes = craft_utils.getDetBoxes(score_text, score_link, text_threshold, link_threshold, low_text)
@@ -130,7 +131,7 @@ if __name__ == '__main__':
         print("Test image {:d}/{:d}: {:s}".format(k+1, len(image_list), image_path), end='\r')
         image = imgproc.loadImage(image_path)
 
-        bboxes, score_text = test_net(net, image, args.text_threshold, args.link_threshold, args.low_text, args.cuda)
+        bboxes, score_text = test_net(net, image, args.text_threshold, args.link_threshold, args.low_text, args.cuda, image_path)
 
         # save score text
         filename, file_ext = os.path.splitext(os.path.basename(image_path))
