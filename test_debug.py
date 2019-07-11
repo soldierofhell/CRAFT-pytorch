@@ -52,6 +52,7 @@ parser.add_argument('--canvas_size', default=1280, type=int, help='image size fo
 parser.add_argument('--mag_ratio', default=1.5, type=float, help='image magnification ratio')
 parser.add_argument('--show_time', default=False, action='store_true', help='show processing time')
 parser.add_argument('--test_folder', default='/data/', type=str, help='folder path to input images')
+parser.add_argument('--debug', action='store_true', help='debug mode')
 
 args = parser.parse_args()
 
@@ -86,6 +87,10 @@ def test_net(net, image, text_threshold, link_threshold, low_text, cuda):
 
     t0 = time.time() - t0
     t1 = time.time()
+    
+    if args.debug:
+        np.save('score_text.npy', score_text)
+        np.save('score_link.npy', score_link)
 
     # Post-processing
     boxes = craft_utils.getDetBoxes(score_text, score_link, text_threshold, link_threshold, low_text)
