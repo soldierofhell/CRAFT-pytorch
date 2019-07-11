@@ -89,7 +89,7 @@ def test_net(net, image, text_threshold, link_threshold, low_text, cuda, image_p
     t1 = time.time()
     
     if args.debug:
-        os.makedirs('debug', exists_ok=True)
+        os.makedirs('debug', exist_ok=True)
         np.save(os.path.join('./debug', os.path.basename(image_path).split[0] + '_score_text.npy'), score_text)
         np.save(os.path.join('./debug', os.path.basename(image_path).split[0] + '_score_link.npy'), score_link)
 
