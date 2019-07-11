@@ -63,6 +63,11 @@ image_list, _, _ = file_utils.get_files(args.test_folder)
 result_folder = './result/'
 if not os.path.isdir(result_folder):
     os.mkdir(result_folder)
+    
+if args.debug:
+    import shutil
+    shutil.rmtree('debug', ignore_errors=True)
+    os.makedirs('debug', exist_ok=True)
 
 def test_net(net, image, text_threshold, link_threshold, low_text, cuda, image_path):
     t0 = time.time()
@@ -89,9 +94,6 @@ def test_net(net, image, text_threshold, link_threshold, low_text, cuda, image_p
     t1 = time.time()
     
     if args.debug:
-        import shutil
-        shutil.rmtree('debug', ignore_errors=True)
-        os.makedirs('debug', exist_ok=True)
         np.save(os.path.join('./debug', os.path.basename(image_path).split('.')[0] + '_score_text.npy'), score_text)
         np.save(os.path.join('./debug', os.path.basename(image_path).split('.')[0] + '_score_link.npy'), score_link)
 
